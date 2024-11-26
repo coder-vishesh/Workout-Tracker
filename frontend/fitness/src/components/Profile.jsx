@@ -1,18 +1,33 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Profile() {
-  const [name, setName] = useState("");
+  const [isAuthenticated, setisAuthenticated] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const storedFullName = localStorage.getItem("fullName");
-    setName(storedFullName);
-  }, []);
-
+    fetch("http://localhost:1234/profile", {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          setisAuthenticated(true);
+        } else {
+          navigate("/");
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [navigate]);
+  if (!isAuthenticated) {
+    return <div>loading.......</div>;
+  }
   return (
     <>
       <div className="">
-        <h1>Welcome {name} </h1>
+        <h1>Welcome </h1>
       </div>
     </>
   );

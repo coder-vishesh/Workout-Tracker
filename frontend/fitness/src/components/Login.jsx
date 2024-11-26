@@ -18,22 +18,13 @@ function LoginHandle() {
       headers: {
         "content-type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(loginData),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          let fullName = data.userInfo.fName + " " + data.userInfo.lName;
-          const token = data.token;
-          localStorage.setItem("fullName", fullName);
-          localStorage.setItem("token", token);
-          console.log(data);
-          const extractToken = localStorage.getItem("token");
-          if (!extractToken) {
-            return "no token found";
-          } else {
-            navigateTo("/profile");
-          }
+          navigateTo("/profile");
         }
       })
       .catch((err) => console.log(err));
@@ -60,7 +51,7 @@ function LoginHandle() {
             onChange={(e) => setPassword(e.target.value)}
           ></input>
           <button type="submit">Log in</button>
-          <button type="button" onClick={() => navigateTo("signup")}>
+          <button type="button" onClick={() => navigateTo("/signup")}>
             Sign up
           </button>
         </div>

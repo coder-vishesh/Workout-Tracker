@@ -13,7 +13,14 @@ exports.login = async function(req,res){
         if(isUser) { 
             //const isPasswordValid = await bcrypt.compare(password, isUser.password)
             if(isUser.password == password) {
-                const token = jwt.sign({_id: isUser._id, email : email},process.env.SECRET_KEY,{expiresIn : "1m"})
+                const token = jwt.sign({_id: isUser._id, email : email},process.env.SECRET_KEY,{expiresIn : "1h"})
+                res.cookie("token", token, { 
+                    httpOnly: true, 
+                    samesite : "strict", 
+                    secure : false, 
+                    
+
+                });
                 res.status(202).json({success : "User logged in", userInfo: isUser,token : token})
             }else { 
                 console.log("Check your password")
